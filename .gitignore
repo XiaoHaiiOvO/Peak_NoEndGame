@@ -1,0 +1,19 @@
+# Build artifacts and local compiler caches
+[Bb]in/
+[Oo]bj/
+.build/
+
+# Decompiled game files are local analysis material and are not part of this mod.
+游戏源码/
+
+# Local editor and operating-system files
+.vs/
+.idea/
+*.user
+*.suo
+Thumbs.db
+Desktop.ini
+
+# Keep source and documentation in Git; distribute the compiled DLL separately.
+*.dll
+*.pdb
