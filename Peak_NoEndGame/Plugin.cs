@@ -11,7 +11,7 @@ namespace Peak_NoEndGame
     {
         public const string GUID = "com.Xiaohai.CampfireRespawn";
         public const string NAME = "Campfire Respawn";
-        public const string VERSION = "2.0.0";
+        public const string VERSION = "2.0.1";
 
         internal static Plugin Instance { get; private set; }
         internal static ManualLogSource Log { get; private set; }

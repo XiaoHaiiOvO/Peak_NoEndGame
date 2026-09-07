@@ -12,7 +12,7 @@ namespace Peak_NoEndGame
     public sealed class ReviewHandler : MonoBehaviourPun
     {
         private const float RespawnCooldown = 5f;
-        private const float WipeCheckInterval = 0.2f;
+        private const float DeathCheckInterval = 0.2f;
         private const float StatusClearInterval = 3f;
 
         private readonly InventoryCheckpoint _checkpoint = new InventoryCheckpoint();
@@ -20,7 +20,7 @@ namespace Peak_NoEndGame
         private bool _respawning;
         private bool _warnedMissingSpawn;
         private float _lastRespawnTime = float.NegativeInfinity;
-        private float _nextWipeCheck;
+        private float _nextDeathCheck;
         private float _nextStatusClear;
         private float _fogResetSize = 300f;
 
@@ -61,13 +61,16 @@ namespace Peak_NoEndGame
                 TryStartRespawn(true);
             }
 
-            if (Time.unscaledTime < _nextWipeCheck)
+            if (Time.unscaledTime < _nextDeathCheck)
             {
                 return;
             }
 
-            _nextWipeCheck = Time.unscaledTime + WipeCheckInterval;
-            if (AllPlayersDeadOrDown())
+            // Character.CheckEndGame is the primary, synchronous interception point.
+            // This death-only poll is a recovery path for cooldowns, host migration, or
+            // another mod skipping CheckEndGame. A recoverable pass-out must never start it.
+            _nextDeathCheck = Time.unscaledTime + DeathCheckInterval;
+            if (AllPlayersDead())
             {
                 TryStartRespawn(false);
             }
@@ -79,7 +82,7 @@ namespace Peak_NoEndGame
             _respawning = false;
             _warnedMissingSpawn = false;
             _lastRespawnTime = float.NegativeInfinity;
-            _nextWipeCheck = 0f;
+            _nextDeathCheck = 0f;
             _nextStatusClear = 0f;
             reviveTimes = 0;
             _checkpoint.Clear();
@@ -183,7 +186,7 @@ namespace Peak_NoEndGame
                 return false;
             }
 
-            if (!forced && !AllPlayersDeadOrDown())
+            if (!forced && !AllPlayersDead())
             {
                 return false;
             }
@@ -592,26 +595,6 @@ namespace Peak_NoEndGame
             }
 
             return null;
-        }
-
-        private static bool AllPlayersDeadOrDown()
-        {
-            bool foundCharacter = false;
-            foreach (Character character in Character.AllCharacters)
-            {
-                if (character == null || character.data == null)
-                {
-                    continue;
-                }
-
-                foundCharacter = true;
-                if (!character.data.dead && !character.data.fullyPassedOut)
-                {
-                    return false;
-                }
-            }
-
-            return foundCharacter;
         }
 
         private static bool AllPlayersDead()

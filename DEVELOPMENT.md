@@ -1,6 +1,6 @@
 # Campfire Respawn — Development Notes
 
-`Peak_NoEndGame` keeps a PEAK run alive after the whole party is dead or fully passed out. Version 2.0.0 targets the current game API represented by the `游戏源码/Assembly-CSharp` snapshot in this repository.
+`Peak_NoEndGame` keeps a PEAK run alive after the whole party is confirmed dead. Version 2.0.1 targets the current game API represented by the `游戏源码/Assembly-CSharp` snapshot in this repository.
 
 ## Behavior
 
@@ -12,6 +12,7 @@
 - `RespawnHotkey` performs the same reset manually on the host.
 - `CampfireClearStatus` clears curable negative statuses for each local player while resting by a lit campfire.
 - Respawn count and UI are host-authoritative; each client keeps a local campfire snapshot so normal host migration does not discard it.
+- Automatic respawn is triggered only by `CharacterData.dead`. `Character.CheckEndGame` is intercepted synchronously before it can send `RPCEndGame`; a death-only poll is retained as a cooldown and host-migration fallback. Recoverable `fullyPassedOut` state is never treated as a wipe.
 
 The plugin keeps its original GUID and configuration keys, including the legacy `ReviveClearStatus` key, so existing config files continue to load.
 
@@ -37,4 +38,4 @@ If the managed assemblies or BepInEx core are elsewhere, pass `PeakManagedDir`, 
 
 Copy `Peak_NoEndGame.dll` to `PEAK/BepInEx/plugins/CampfireRespawn/`. Every player should install the same plugin version; the host controls respawn and item restoration.
 
-For a multiplayer smoke test, light a campfire, let the full party become dead or fully passed out, and verify the spawn position, hazard reset, inventory result, and remaining-respawn counter. Test both values of `recordItemsAtCampfire` because they intentionally use different recovery paths.
+For a multiplayer smoke test, light a campfire, first verify that a fully passed-out last player is not automatically revived, then let the full party become dead and verify the spawn position, hazard reset, inventory result, and remaining-respawn counter. Test both values of `recordItemsAtCampfire` because they intentionally use different recovery paths.

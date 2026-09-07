@@ -8,26 +8,28 @@
 
 ## About
 
-Campfire Respawn prevents a PEAK run from ending immediately when the entire party dies or becomes fully passed out. Instead, the party is revived at the current area's safe respawn point so the run can continue.
+Campfire Respawn prevents a PEAK run from ending immediately when the entire party dies. Instead, the party is revived at the current area's safe respawn point so the run can continue.
 
 Before reviving the party, the mod resets advancing hazards such as fog, lava, and Gloom. It can then restore either the inventory recorded at the latest campfire or the items dropped during the wipe.
 
-Current version: `2.0.0`
+Current version: `2.0.1`
 
 ## Features
 
 ### Continue after a party wipe
 
-When every player is dead or fully passed out, the host automatically starts a campfire respawn:
+When every player is confirmed dead, the host automatically starts a campfire respawn:
 
 1. The normal game-over sequence is temporarily blocked.
 2. Fog, lava, Gloom, and other active rising hazards are reset.
-3. Dead and fully passed-out players are revived.
+3. Dead players are revived.
 4. The party is moved to the appropriate reconnect, campfire, or special spawn point.
 5. Player items are restored according to the selected inventory mode.
 6. One available respawn is consumed.
 
 Normal areas, The Kiln, PEAK, and Void use their own appropriate spawn rules.
+
+Being passed out—even when playing solo or as the last conscious player—does not trigger an automatic respawn. The original recovery window remains available. Automatic respawn starts only after the game has changed every player to the dead state. The manual host hotkey can still revive a fully passed-out player.
 
 When no respawns remain, or when the current map has no valid respawn point, the game is allowed to proceed to its normal results screen.
 
@@ -237,12 +239,13 @@ Test the mod in a private lobby after installation:
 1. Confirm that every player has installed the same version.
 2. Light a campfire that advances the current area.
 3. Note the items carried by each player.
-4. Let the entire party die or become fully passed out.
-5. Confirm that the party respawns in the correct area.
-6. Confirm that fog or lava has returned to its starting position.
-7. Check that the inventory result matches the selected recovery mode and chance.
-8. Check that the remaining-respawn count decreases.
-9. Test both `recordItemsAtCampfire = true` and `false` at least once.
+4. First let the last player become fully passed out and confirm that the mod does not respawn them during the normal recovery window.
+5. Then let the entire party die.
+6. Confirm that the party respawns in the correct area.
+7. Confirm that fog or lava has returned to its starting position.
+8. Check that the inventory result matches the selected recovery mode and chance.
+9. Check that the remaining-respawn count decreases.
+10. Test both `recordItemsAtCampfire = true` and `false` at least once.
 
 ## Troubleshooting
 
@@ -256,7 +259,7 @@ Check that:
 - `BepInEx\LogOutput.log` contains:
 
 ```text
-Campfire Respawn v2.0.0 loaded
+Campfire Respawn v2.0.1 loaded
 ```
 
 ### The run still ends after a party wipe
@@ -294,7 +297,7 @@ recordItemsAtCampfire = false
 
 ### Clients show different counts or RPC errors
 
-Confirm that every player is using version `2.0.0` and remove any older DLLs. Mixing versions can cause the parameters of custom multiplayer messages to differ.
+Confirm that every player is using version `2.0.1` and remove any older DLLs. Mixing versions can cause the parameters of custom multiplayer messages to differ.
 
 ### F11 does not work
 
@@ -326,22 +329,24 @@ Campfire Respawn 可以在《PEAK》中阻止全队团灭后立即结束本局�
 
 复活时，MOD 会重置正在逼近的雾、岩浆或其他上升危险，并根据配置恢复玩家物品。它适用于单人游戏和多人联机，实际复活流程由房主控制。
 
-当前版本：`2.0.0`
+当前版本：`2.0.1`
 
 ## 主要功能
 
 ### 全队团灭后继续游戏
 
-当所有玩家都已经死亡或完全昏迷时，房主会自动触发篝火复活：
+当所有玩家都被游戏确认为死亡后，房主会自动触发篝火复活：
 
 1. 暂停正常的游戏结束流程。
 2. 重置当前区域的雾、岩浆或 Gloom 等上升危险。
-3. 将死亡或完全昏迷的玩家复活。
+3. 将死亡玩家复活。
 4. 将队伍传送到当前区域对应的重连点、篝火或特殊出生点。
 5. 按配置恢复玩家物品。
 6. 消耗一次可用复活次数。
 
 普通区域、The Kiln、PEAK 和 Void 都有独立的复活点处理。
+
+单人模式或最后一名清醒玩家进入昏迷（包括完全昏迷）时，不会自动触发复活，原版可自行醒来的时间窗口会被保留。只有游戏将全队状态正式改为死亡后，MOD 才会自动复活；房主手动按下快捷键时仍可强制复活完全昏迷的玩家。
 
 当复活次数用完，或当前地图没有有效复活点时，MOD 会放行游戏原本的结算流程。
 
@@ -551,12 +556,13 @@ RespawnItemChance = 100
 1. 确认所有玩家安装相同版本。
 2. 点亮一个能够推进区域的篝火。
 3. 记住每名玩家当时的物品。
-4. 让全队死亡或完全昏迷。
-5. 确认队伍在正确区域复活。
-6. 确认雾或岩浆已经退回起点。
-7. 检查物品结果是否符合当前恢复模式和概率。
-8. 检查剩余复活次数是否减少。
-9. 分别测试一次 `recordItemsAtCampfire = true` 和 `false`。
+4. 先让最后一名玩家完全昏迷，确认原版可苏醒阶段不会被 MOD 自动复活。
+5. 再让全队正式死亡。
+6. 确认队伍在正确区域复活。
+7. 确认雾或岩浆已经退回起点。
+8. 检查物品结果是否符合当前恢复模式和概率。
+9. 检查剩余复活次数是否减少。
+10. 分别测试一次 `recordItemsAtCampfire = true` 和 `false`。
 
 ## 常见问题
 
@@ -570,7 +576,7 @@ RespawnItemChance = 100
 - `BepInEx\LogOutput.log` 中是否出现：
 
 ```text
-Campfire Respawn v2.0.0 loaded
+Campfire Respawn v2.0.1 loaded
 ```
 
 ### 团灭后仍然直接结束游戏
@@ -608,7 +614,7 @@ recordItemsAtCampfire = false
 
 ### 客户端次数显示不一致或出现 RPC 错误
 
-确认所有玩家都使用 `2.0.0`，并删除旧版 DLL。不同版本混用时，自定义联机消息的参数可能不一致。
+确认所有玩家都使用 `2.0.1`，并删除旧版 DLL。不同版本混用时，自定义联机消息的参数可能不一致。
 
 ### F11 没有效果
 
